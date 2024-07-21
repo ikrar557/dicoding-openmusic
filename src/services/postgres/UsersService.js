@@ -17,7 +17,7 @@ class UsersService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id',
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING user_id',
       values: [id, username, hashedPassword, fullname],
     };
 
@@ -26,7 +26,7 @@ class UsersService {
     if (!result.rows.length) {
       throw new InvariantError('User gagal ditambahkan');
     }
-    return result.rows[0].id;
+    return result.rows[0].user_id;
   }
 
   async verifyNewUsername(username) {
@@ -44,7 +44,7 @@ class UsersService {
 
   async getUserById(userId) {
     const query = {
-      text: 'SELECT id, username, fullname FROM users WHERE id = $1',
+      text: 'SELECT user_id, username, fullname FROM users WHERE user_id = $1',
       values: [userId],
     };
 
@@ -59,7 +59,7 @@ class UsersService {
 
   async verifyUserCredential(username, password) {
     const query = {
-      text: 'SELECT id, password FROM users WHERE username = $1',
+      text: 'SELECT user_id, password FROM users WHERE username = $1',
       values: [username],
     };
 
@@ -68,7 +68,7 @@ class UsersService {
       throw new AuthenticationError('Kredensial yang Anda berikan salah');
     }
 
-    const { id, password: hashedPassword } = result.rows[0];
+    const { user_id: id, password: hashedPassword } = result.rows[0];
 
     const match = await bcrypt.compare(password, hashedPassword);
 

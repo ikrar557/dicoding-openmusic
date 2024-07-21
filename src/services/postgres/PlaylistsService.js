@@ -1,4 +1,3 @@
-/* eslint-disable no-tabs */
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
 

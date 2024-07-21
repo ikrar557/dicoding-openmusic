@@ -59,11 +59,11 @@ class SongsService {
 
     const result = await this.pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError('Data tidak ditemukan');
     }
 
-    return result.rows.map(mapDBToModel)[0];
+    return mapDBToModel(result.rows[0]);
   }
 
   async editSongById(id, {
@@ -85,6 +85,8 @@ class SongsService {
     if (!result.rows.length) {
       throw new NotFoundError('Gagal memperbarui lagu. Id tidak ditemukan');
     }
+
+    return result.rows.map(mapDBToModel)[0];
   }
 
   async deleteSongById(id) {
@@ -98,6 +100,8 @@ class SongsService {
     if (!result.rows.length) {
       throw new NotFoundError('Lagu gagal dihapus. Id tidak ditemukan');
     }
+
+    return mapDBToModel(result.rows[0]);
   }
 }
 

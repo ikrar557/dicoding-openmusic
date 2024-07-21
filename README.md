@@ -1,4 +1,4 @@
-# Dicoding OpenMusic
+`# Dicoding OpenMusic
 Proyek ini adalah aplikasi manajemen musik yang dikembangkan sebagai bagian dari pelatihan di Dicoding. 
 Aplikasi ini memungkinkan pengguna untuk mengelola koleksi musik mereka termasuk album dan lagu.
 

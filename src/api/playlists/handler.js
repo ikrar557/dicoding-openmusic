@@ -35,7 +35,6 @@ class PlaylistsHandler {
     await this._service.checkSongId(songId);
     await this._service.addPlaylistSongById(playlistId, songId);
 
-    // add to playlist activity
     const time = new Date().toISOString();
     await this._service.addToActivity(playlistId, songId, credentialId, 'add', time);
 
@@ -89,7 +88,6 @@ class PlaylistsHandler {
     await this._service.verifyPlaylistAccess(playlistId, credentialId);
     await this._service.deletePlaylistSongById(playlistId, songId);
 
-    // add to playlist activity
     const time = new Date().toISOString();
     await this._service.addToActivity(playlistId, songId, credentialId, 'delete', time);
 

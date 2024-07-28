@@ -3,6 +3,7 @@ const mapDBToModel = ({
   name,
   songs,
   year,
+  coverUrl,
   createdAt,
   updateAt,
 }) => ({
@@ -10,6 +11,7 @@ const mapDBToModel = ({
   name,
   songs,
   year,
+  coverUrl,
   createdAt,
   updateAt,
 });

@@ -1,8 +1,9 @@
 const autoBind = require('auto-bind');
 
 class musicAlbumsHandler {
-  constructor(service, validator) {
+  constructor(service, storageService, validator) {
     this._service = service;
+    this._storageService = storageService;
     this._validator = validator;
 
     autoBind(this);
@@ -63,6 +64,68 @@ class musicAlbumsHandler {
     return {
       status: 'success',
       message: 'Data album sukses dihapus',
+    };
+  }
+
+  async postAlbumCoverHandler(request, h) {
+    const { id } = request.params;
+    const { cover } = request.payload;
+    this._validator.validateAlbumCoverHeaders(cover.hapi.headers);
+
+    const filename = await this._storageService.writeFile(cover, cover.hapi);
+    const url = `http://${process.env.HOST}:${process.env.PORT}/albums/file/images/${filename}`;
+    await this._service.editAlbumCoverById(id, url);
+
+    const response = h.response({
+      status: 'success',
+      message: 'sampul berhasil diunggah',
+    });
+    response.code(201);
+    return response;
+  }
+
+  async postLikeAlbumHandler(request, h) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._service.getAlbumById(id);
+    await this._service.addLikeAlbum(id, credentialId);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Album disukai',
+    });
+    response.code(201);
+    return response;
+  }
+
+  async getLikesAlbumHandler(request, h) {
+    const { id } = request.params;
+    const { isCache, result } = await this._service.getLikesAlbum(id);
+
+    const response = h.response({
+      status: 'success',
+      data: {
+        likes: result,
+      },
+    });
+    if (isCache) {
+      response.header('X-Data-Source', 'cache');
+    } else {
+      response.header('X-Data-Source', 'not-cache');
+    }
+    return response;
+  }
+
+  async deleteLikeAlbumHandler(request) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._service.deleteLikeAlbum(id, credentialId);
+
+    return {
+      status: 'success',
+      message: 'Album batal disukai',
     };
   }
 }

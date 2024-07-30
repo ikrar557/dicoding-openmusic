@@ -5,17 +5,14 @@ class SongsService {
     this._pool = new Pool();
   }
 
-  async getSongsByPlaylist(playlistId) {
+  async getPlaylistById(playlistId) {
     const query = {
-      text: `SELECT songs.id, songs.title, songs.performer FROM playlist_songs
-      INNER JOIN songs ON songs.id = playlist_songs.song_id
-      INNER JOIN playlists ON playlists.playlist_id = playlist_songs.playlist_id
-      WHERE playlist_songs.playlist_id = $1`,
+      text: 'SELECT playlist_id, name FROM playlists WHERE playlist_id = $1',
       values: [playlistId],
     };
 
     const result = await this._pool.query(query);
-    return result.rows;
+    return result.rows[0];
   }
 }
 

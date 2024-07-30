@@ -46,7 +46,7 @@ const init = async () => {
   const cacheService = new CacheService();
   const collaborationsService = new CollaborationsService();
   const albumService = new AlbumsService(cacheService);
-  const songService = new SongsService();
+  const songService = new SongsService(cacheService);
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
   const playlistsService = new PlaylistsService(collaborationsService);
@@ -176,6 +176,8 @@ const init = async () => {
       const newResponse = h.response({
         status: 'error',
         message: 'Terjadi kesalahan pada server',
+        error: response.message,
+        stack: response.stack,
       });
       newResponse.code(500);
       return newResponse;

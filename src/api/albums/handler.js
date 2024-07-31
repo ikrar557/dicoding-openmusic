@@ -1,4 +1,5 @@
 const autoBind = require('auto-bind');
+const config = require('../../utils/config');
 
 class musicAlbumsHandler {
   constructor(service, storageService, validator) {
@@ -7,11 +8,6 @@ class musicAlbumsHandler {
     this._validator = validator;
 
     autoBind(this);
-
-    this.getAlbumId = this.getAlbumId.bind(this);
-    this.postAlbum = this.postAlbum.bind(this);
-    this.putAlbumId = this.putAlbumId.bind(this);
-    this.deleteAlbumId = this.deleteAlbumId.bind(this);
   }
 
   async getAlbumId(request) {
@@ -73,7 +69,7 @@ class musicAlbumsHandler {
     this._validator.validateAlbumCoverHeaders(cover.hapi.headers);
 
     const filename = await this._storageService.writeFile(cover, cover.hapi);
-    const url = `http://${process.env.HOST}:${process.env.PORT}/albums/file/images/${filename}`;
+    const url = `http://${config.app.host}:${config.app.port}/albums/file/images/${filename}`;
     await this._service.editAlbumCoverById(id, url);
 
     const response = h.response({

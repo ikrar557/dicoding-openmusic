@@ -1,7 +1,6 @@
 class ActivitiesHandler {
-  constructor(service, validator) {
+  constructor(service) {
     this._service = service;
-    this._validator = validator;
   }
 
   async getActivitiesByIdHandler(request) {

@@ -5,12 +5,6 @@ class SongsHandler {
     this._validator = validator;
     this._service = service;
     autoBind(this);
-
-    this.getSongs = this.getSongs.bind(this);
-    this.getSongId = this.getSongId.bind(this);
-    this.postNewSong = this.postNewSong.bind(this);
-    this.putSongId = this.putSongId.bind(this);
-    this.deleteSongId = this.deleteSongId.bind(this);
   }
 
   async getSongs(request, h) {

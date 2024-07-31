@@ -5,6 +5,7 @@ const PlaylistsService = require('./PlaylistsService');
 const SongService = require('./SongService');
 const MailSender = require('./MailSender');
 const Listener = require('./Listener');
+const config = require('../src/utils/config');
 
 const init = async () => {
   const playlistsService = new PlaylistsService();
@@ -12,7 +13,7 @@ const init = async () => {
   const mailSender = new MailSender();
   const listener = new Listener(playlistsService, songsService, mailSender);
 
-  const connection = await amqp.connect(process.env.RABBITMQ_SERVER);
+  const connection = await amqp.connect(config.rabbitMq.server);
   const channel = await connection.createChannel();
 
   await channel.assertQueue('export:playlist', {
